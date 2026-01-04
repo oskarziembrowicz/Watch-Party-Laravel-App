@@ -20,7 +20,7 @@ return new class extends Migration
             $table->enum('role', ['admin', 'user'])->default('user');
 
             // replaces savedMovies: [String]
-            $table->json('saved_movies')->default(json_encode([]));
+            $table->json('saved_movies')->nullable();
 
             $table->timestamps();
         });
