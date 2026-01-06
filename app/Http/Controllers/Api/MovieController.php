@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 class MovieController extends Controller
 {
-    public function index(Request $request)
+    public function getMovie(Request $request)
     {
         // Get the title from request
         $title = $request->query('title');
@@ -47,7 +47,31 @@ class MovieController extends Controller
         return response()->json([
             'status' => 'success',
             'data' => [
-                'result' => $data
+                'movie' => $data
+            ]
+        ]);
+    }
+
+    public function getMovieById(Request $request, $id) {
+        // Fetch the OMDB API
+        $response = Http::get(config('services.omdb.url'), [
+            'apikey' => config('services.omdb.key'),
+            'i' => $id,
+        ]);
+
+         $data = $response->json();
+
+        if (isset($data['Error'])) {
+            return response()->json([
+                'status' => 'error',
+                'message' => $data['Error']
+            ], 404);
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'movie' => $data
             ]
         ]);
     }
