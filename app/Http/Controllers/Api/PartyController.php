@@ -51,4 +51,14 @@ class PartyController extends Controller
             ],
         ], 200);
     }
+
+    public function access(Request $request, Party $party) {
+        // Response
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'party' => $party,
+            ],
+        ], 200);
+    }
 }

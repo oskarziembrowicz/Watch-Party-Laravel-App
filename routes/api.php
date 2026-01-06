@@ -23,3 +23,5 @@ Route::get('/movies/{id}', [MovieController::class,'getMovieById'])->name('movie
 // --------------
 Route::get('parties', [PartyController::class,'list'])->name('parties.list');
 Route::post('/parties', [PartyController::class, 'store'])->name('parties.store');
+
+Route::get('/parties/{party}', [PartyController::class, 'access'])->name('parties.access');

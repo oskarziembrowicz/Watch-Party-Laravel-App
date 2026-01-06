@@ -8,7 +8,7 @@
 - [ ] Party endpoints:
   - [x] Create a party (base)
   - [ ] Create a party (full)
-  - [ ] Get a party
+  - [x] Get a party
   - [x] Get all parties
   - [ ] Add movie
   - [ ] Remove movie
