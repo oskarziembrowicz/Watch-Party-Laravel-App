@@ -8,6 +8,27 @@ use App\Http\Controllers\Controller;
 
 class PartyController extends Controller
 {
+    public function list(Request $request) {
+        $parties = Party::latest()->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'parties' => $parties->toArray(),
+            ],
+        ], 200);
+    }
+
+    public function access(Request $request, Party $party) {
+        // Response
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'party' => $party,
+            ],
+        ], 200);
+    }
+
     public function store(Request $request)
     {
         // Validate request
@@ -41,24 +62,42 @@ class PartyController extends Controller
         ], 201);
     }
 
-    public function list(Request $request) {
-        $parties = Party::latest()->get();
+    // FIXME: This creates a new party
+    public function update(Request $request, Party $party)
+{
+    // Allowed fields to update
+    $allowedFields = [
+        'name',
+        'description',
+        'startDate',
+        'isOnline',
+        'joinLink',
+    ];
 
+    if (!$party) {
         return response()->json([
-            'status' => 'success',
-            'data' => [
-                'parties' => $parties->toArray(),
-            ],
-        ], 200);
+            'status' => 'error',
+            'message' => 'No party found with that ID',
+        ], 404);
     }
 
-    public function access(Request $request, Party $party) {
-        // Response
-        return response()->json([
-            'status' => 'success',
-            'data' => [
-                'party' => $party,
-            ],
-        ], 200);
+    // Only update allowed fields
+    foreach ($allowedFields as $field) {
+        if ($request->has($field)) {
+            // Convert camelCase to snake_case for DB
+            $dbField = \Illuminate\Support\Str::snake($field);
+            $party->$dbField = $request->input($field);
+        }
     }
+
+    $party->save(); // Persist changes
+
+    return response()->json([
+        'status' => 'success',
+        'data' => [
+            'updatedParty' => $party,
+        ],
+    ], 200);
+}
+
 }

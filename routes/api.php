@@ -24,4 +24,11 @@ Route::get('/movies/{id}', [MovieController::class,'getMovieById'])->name('movie
 Route::get('parties', [PartyController::class,'list'])->name('parties.list');
 Route::post('/parties', [PartyController::class, 'store'])->name('parties.store');
 
+// Route: GET /api/parties/{id}
+// Desc: Get party by id
 Route::get('/parties/{party}', [PartyController::class, 'access'])->name('parties.access');
+
+// Route: PATCH /api/parties/{id}
+// Desc: Update party
+Route::patch('/parties/{id}', [PartyController::class, 'update']);
+
