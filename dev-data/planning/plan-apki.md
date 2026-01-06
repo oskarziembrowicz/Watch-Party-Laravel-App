@@ -6,10 +6,10 @@
 - [x] Connect to db
 - [x] Working first endpoint
 - [ ] Party endpoints:
-  - [ ] Create a party (base)
+  - [x] Create a party (base)
   - [ ] Create a party (full)
   - [ ] Get a party
-  - [ ] Get all parties
+  - [x] Get all parties
   - [ ] Add movie
   - [ ] Remove movie
   - [ ] Add participant

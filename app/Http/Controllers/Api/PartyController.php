@@ -40,4 +40,15 @@ class PartyController extends Controller
             ],
         ], 201);
     }
+
+    public function list(Request $request) {
+        $parties = Party::latest()->get();
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'parties' => $parties->toArray(),
+            ],
+        ], 200);
+    }
 }
