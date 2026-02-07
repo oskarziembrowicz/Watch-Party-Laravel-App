@@ -22,16 +22,18 @@
     - [x] Login
     - [x] Logout
     - [x] Get my data
-    - [ ] Get user by id
-    - [ ] Get all users
+    - [x] Get user by id
+    - [x] Get all users
     - [ ] Get user parties
     - [ ] Get hosted parties
     - [ ] Add favorite movie
     - [ ] Remove movie from favorites
     - [ ] Add user as friend
     - [ ] Remove user from friends
-    - [ ] Edit user data
-    - [ ] Delete user
+    - [x] Edit user data
+    - [ ] Edit my data
+    - [x] Delete user
+    - [ ] Delete me
 - [x] Movie endpoints:
     - [x] Find movie
     - [x] Get movie by id

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\PartyController;
+use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -25,6 +26,7 @@ Route::get('/users/logout', [AuthController::class, 'logout'])->middleware('auth
 Route::get('/users/me', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
+Route::apiResource('users', UserController::class);
 
 // --------------
 // MOVIES
