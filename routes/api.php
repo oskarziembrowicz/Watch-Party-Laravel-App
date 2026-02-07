@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\PartyController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/hello', function () {
@@ -16,7 +17,14 @@ Route::get('/hello', function () {
 // --------------
 Route::post('/users/signup', [AuthController::class, 'signup']);
 Route::post('/users/login', [AuthController::class, 'login']);
-Route::post('/users/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::get('/users/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+
+// --------------
+// USERS
+// --------------
+Route::get('/users/me', function (Request $request) {
+    return $request->user();
+})->middleware('auth:sanctum');
 
 // --------------
 // MOVIES
