@@ -10,6 +10,27 @@ use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    public function signup(Request $request)
+    {
+        // TODO: Add hashing
+        // $hashedPassword = Hash::make($request->password);
+
+        $user = User::create([
+            ...$request->validate([
+                'username' => 'required',
+                'email' => 'required|email|unique:users,email',
+                'password' => 'required',
+            ])
+        ]);
+
+        $token = $user->createToken('api-token')->plainTextToken;
+
+        return response()->json([
+            'user' => $user,
+            'token' => $token
+        ], 201);
+    }
+
     public function login(Request $request)
     {
         $request->validate([

@@ -14,6 +14,7 @@ Route::get('/hello', function () {
 // --------------
 // AUTHENTICATION
 // --------------
+Route::post('/users/signup', [AuthController::class, 'signup']);
 Route::post('/users/login', [AuthController::class, 'login']);
 Route::post('/users/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
