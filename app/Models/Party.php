@@ -17,7 +17,7 @@ class Party extends Model
         'join_link',
         'address',
         'movies',
-        // 'author_id',
+        'author_id',
     ];
 
     protected $hidden = [
@@ -38,13 +38,15 @@ class Party extends Model
     |--------------------------------------------------------------------------
     */
 
-    // public function participants()
-    // {
-    //     return $this->belongsToMany(User::class);
-    // }
+    // Participants
+    public function participants()
+    {
+        return $this->belongsToMany(User::class, 'party_user', 'party_id', 'user_id');
+    }
 
-    // public function author()
-    // {
-    //     return $this->belongsTo(User::class, 'author_id');
-    // }
+    // Author
+    public function author()
+    {
+        return $this->belongsTo(User::class, 'author_id');
+    }
 }

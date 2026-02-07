@@ -25,14 +25,25 @@ Route::get('/users/logout', [AuthController::class, 'logout'])->middleware('auth
 // --------------
 Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('users')->group(function () {
-        // Route::get('me', [UserController::class, 'me']);          // GET /users/me
+        // ---- Me ----
         Route::get('me', [UserController::class, 'getMe']);;
         Route::patch('me', [UserController::class, 'updateMe']);   // PATCH /users/me
         Route::delete('me', [UserController::class, 'destroyMe']); // DELETE /users/me
 
-        // User parties
-        Route::get('me/parties', [UserController::class, 'myParties']); // GET /users/me/parties
-        Route::get('{user}/parties', [UserController::class, 'userParties']); // GET /users/{id}/parties
+        // ---- FRIENDS ----
+        Route::put('me/friends', [UserController::class, 'addFriend']);
+        Route::delete('me/friends/{id}', [UserController::class, 'removeFriend']);
+
+        // ---- MOVIES ----
+        Route::put('me/movies', [UserController::class, 'addMovie']);
+        Route::delete('me/movies/{id}', [UserController::class, 'removeMovie']);
+
+        // ---- PARTIES ----
+        Route::get('me/hosted-parties', [UserController::class, 'myHostedParties']);
+        Route::get('{user}/hosted-parties', [UserController::class, 'hostedParties']);
+
+        Route::get('me/parties', [UserController::class, 'myParties']);
+        Route::get('{user}/parties', [UserController::class, 'userParties']);
     });
 
     Route::apiResource('users', UserController::class);
@@ -47,14 +58,21 @@ Route::get('/movies/{id}', [MovieController::class, 'getMovieById'])->name('movi
 // --------------
 // PARTIES
 // --------------
-Route::apiResource('parties', PartyController::class);
-// Route::get('parties', [PartyController::class,'list'])->name('parties.list');
-// Route::post('/parties', [PartyController::class, 'store'])->name('parties.store');
+Route::middleware('auth:sanctum')->group(function () {
 
-// Route: GET /api/parties/{id}
-// Desc: Get party by id
-// Route::get('/parties/{party}', [PartyController::class, 'access'])->name('parties.access');
+    Route::apiResource('parties', PartyController::class);
 
-// Route: PATCH /api/parties/{id}
-// Desc: Update party
-// Route::patch('/parties/{id}', [PartyController::class, 'update']);
+    // ---- PARTICIPANTS ----
+    Route::patch('parties/{party}/participants', [PartyController::class, 'addParticipant']);
+    Route::delete(
+        'parties/{party}/participants/{id}',
+        [PartyController::class, 'removeParticipant']
+    );
+
+    // ---- MOVIES ----
+    Route::patch('parties/{party}/movies', [PartyController::class, 'addMovie']);
+    Route::delete(
+        'parties/{party}/movies/{id}',
+        [PartyController::class, 'removeMovie']
+    );
+});

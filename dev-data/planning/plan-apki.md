@@ -5,35 +5,36 @@
 - [x] Set up the project
 - [x] Connect to db
 - [x] Working first endpoint
-- [ ] Party endpoints:
+- [x] Party endpoints:
     - [x] Create a party (base)
-    - [ ] Create a party (full)
+    - [x] Create a party (full)
     - [x] Get a party
     - [x] Get all parties
-    - [ ] Add movie
-    - [ ] Remove movie
-    - [ ] Add participant
-    - [ ] Remove participant
-    - [ ] Update party
-    - [ ] Edit party
-    - [ ] Delete party
-- [ ] User endpoints:
+    - [x] Add movie
+    - [x] Remove movie
+    - [x] Add participant
+    - [x] Remove participant
+    - [x] Update party
+    - [x] Delete party
+- [x] User endpoints:
     - [x] Register
     - [x] Login
     - [x] Logout
     - [x] Get my data
     - [x] Get user by id
     - [x] Get all users
-    - [ ] Get user parties
-    - [ ] Get hosted parties
-    - [ ] Add favorite movie
-    - [ ] Remove movie from favorites
-    - [ ] Add user as friend
-    - [ ] Remove user from friends
+    - [x] Get user parties
+    - [x] Get my parties
+    - [x] Get hosted parties
+    - [x] get my hosted parties
+    - [x] Add favorite movie
+    - [x] Remove movie from favorites
+    - [x] Add user as friend
+    - [x] Remove user from friends
     - [x] Edit user data
-    - [ ] Edit my data
+    - [x] Edit my data
     - [x] Delete user
-    - [ ] Delete me
+    - [x] Delete me
 - [x] Movie endpoints:
     - [x] Find movie
     - [x] Get movie by id

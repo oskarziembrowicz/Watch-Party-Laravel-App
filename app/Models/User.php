@@ -44,16 +44,25 @@ class User extends Authenticatable
         );
     }
 
+    // Hosted parties
+    public function hostedParties()
+    {
+        return $this->hasMany(Party::class, 'author_id');
+    }
+
+    // Participating parties
     public function parties()
     {
-        return $this->belongsToMany(Party::class);
+        return $this->belongsToMany(Party::class, 'party_user', 'user_id', 'party_id');
     }
 
     public function archivedParties()
     {
         return $this->belongsToMany(
             Party::class,
-            'archived_parties'
+            'archived_parties',
+            'user_id',
+            'party_id'
         );
     }
 

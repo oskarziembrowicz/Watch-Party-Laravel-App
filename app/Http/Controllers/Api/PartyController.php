@@ -14,15 +14,6 @@ class PartyController extends Controller
      */
     public function index(Request $request)
     {
-        // $parties = Party::latest()->get();
-
-        // return response()->json([
-        //     'status' => 'success',
-        //     'data' => [
-        //         'parties' => $parties->toArray(),
-        //     ],
-        // ], 200);
-
         return PartyResource::collection(Party::latest()->get());
     }
 
@@ -31,17 +22,6 @@ class PartyController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate request
-        // $validated = $request->validate([
-        //     'name'        => 'required|string|max:255',
-        //     'description' => 'nullable|string',
-        //     'startDate'   => 'nullable|date',
-        //     'isOnline'    => 'required|boolean',
-        //     'joinLink'    => 'nullable|string',
-        //     'address'     => 'nullable|string',
-        //     'movies'      => 'nullable|array',
-        // ]);
-
         // Create party
         $party = Party::create([
             ...$request->validate([
@@ -52,18 +32,14 @@ class PartyController extends Controller
                 'joinLink'    => 'nullable|string',
                 'address'     => 'nullable|string',
                 'movies'      => 'nullable|array',
-            ])
+            ]),
+            'author_id' => $request->user()->id,
         ]);
 
-        return new PartyResource($party);
+        // Add author as first participant
+        $party->participants()->attach($request->user()->id);
 
-        // Response
-        // return response()->json([
-        //     'status' => 'success',
-        //     'data' => [
-        //         'party' => $party,
-        //     ],
-        // ], 201);
+        return new PartyResource($party);
     }
 
     /**
@@ -72,45 +48,11 @@ class PartyController extends Controller
     public function show(Request $request, Party $party)
     {
         return new PartyResource($party);
-        // Response
-        // return response()->json([
-        //     'status' => 'success',
-        //     'data' => [
-        //         'party' => $party,
-        //     ],
-        // ], 200);
     }
 
     // FIXME: This creates a new party
     public function update(Request $request, Party $party)
     {
-        // // Allowed fields to update
-        // $allowedFields = [
-        //     'name',
-        //     'description',
-        //     'startDate',
-        //     'isOnline',
-        //     'joinLink',
-        // ];
-
-        // if (!$party) {
-        //     return response()->json([
-        //         'status' => 'error',
-        //         'message' => 'No party found with that ID',
-        //     ], 404);
-        // }
-
-        // // Only update allowed fields
-        // foreach ($allowedFields as $field) {
-        //     if ($request->has($field)) {
-        //         // Convert camelCase to snake_case for DB
-        //         $dbField = \Illuminate\Support\Str::snake($field);
-        //         $party->$dbField = $request->input($field);
-        //     }
-        // }
-
-        // $party->save(); // Persist changes
-
         $party->update(
             $request->validate([
                 'name'        => 'sometimes|string|max:255',
@@ -124,14 +66,6 @@ class PartyController extends Controller
         );
 
         return new PartyResource($party);
-
-        // TODO: Keep for comparison of basic approach
-        // return response()->json([
-        //     'status' => 'success',
-        //     'data' => [
-        //         'updatedParty' => $party,
-        //     ],
-        // ], 200);
     }
 
     /**
@@ -142,5 +76,64 @@ class PartyController extends Controller
         $party->delete();
 
         return response(status: 204);
+    }
+
+    /**
+     * Add a participant
+     * PATCH /parties/:id
+     */
+    public function addParticipant(Request $request, Party $party)
+    {
+        $request->validate(['userId' => 'required|exists:users,id']);
+
+        $party->participants()->syncWithoutDetaching([$request->userId]);
+
+        return new PartyResource($party->load('participants'));
+    }
+
+    /**
+     * Remove a participant
+     * DELETE /parties/:partyId/participants/:id
+     */
+    public function removeParticipant($partyId, $id)
+    {
+        $party = Party::findOrFail($partyId);
+
+        $party->participants()->detach($id);
+
+        return response()->noContent();
+    }
+
+    /**
+     * Add a movie
+     * PATCH /parties/:id/movies
+     */
+    public function addMovie(Request $request, Party $party)
+    {
+        $request->validate(['movieId' => 'required|string']);
+
+        $movies = $party->movies ?? [];
+        if (!in_array($request->movieId, $movies)) {
+            $movies[] = $request->movieId;
+        }
+        $party->movies = $movies;
+        $party->save();
+
+        return new PartyResource($party);
+    }
+
+    /**
+     * Remove a movie
+     * DELETE /parties/:partyId/movies/:id
+     */
+    public function removeMovie($partyId, $id)
+    {
+        $party = Party::findOrFail($partyId);
+
+        $movies = $party->movies ?? [];
+        $party->movies = array_values(array_diff($movies, [$id]));
+        $party->save();
+
+        return response()->noContent();
     }
 }
