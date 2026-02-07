@@ -14,7 +14,8 @@ Route::get('/hello', function () {
 // --------------
 // AUTHENTICATION
 // --------------
-Route::post('/login', [AuthController::class, 'login']);
+Route::post('/users/login', [AuthController::class, 'login']);
+Route::post('/users/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 // --------------
 // MOVIES
