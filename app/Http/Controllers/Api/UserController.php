@@ -19,6 +19,11 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
+    public function getMe(Request $request)
+    {
+        return new UserResource($request->user());
+    }
+
     public function update(Request $request, User $user)
     {
         $user->update(
@@ -31,9 +36,30 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
+    public function updateMe(Request $request)
+    {
+        $request->user()->update(
+            $request->validate([
+                'username' => 'sometimes|string',
+                'email' => 'sometimes|email',
+            ])
+        );
+
+        return new UserResource($request->user());
+    }
+
     public function destroy(User $user)
     {
         $user->delete();
+        return response(status: 204);
+    }
+
+    public function destroyMe(Request $request)
+    {
+        $request->user()->tokens()->delete();
+
+        $request->user()->delete();
+
         return response(status: 204);
     }
 }

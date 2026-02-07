@@ -23,10 +23,20 @@ Route::get('/users/logout', [AuthController::class, 'logout'])->middleware('auth
 // --------------
 // USERS
 // --------------
-Route::get('/users/me', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
-Route::apiResource('users', UserController::class);
+Route::middleware('auth:sanctum')->group(function () {
+    Route::prefix('users')->group(function () {
+        // Route::get('me', [UserController::class, 'me']);          // GET /users/me
+        Route::get('me', [UserController::class, 'getMe']);;
+        Route::patch('me', [UserController::class, 'updateMe']);   // PATCH /users/me
+        Route::delete('me', [UserController::class, 'destroyMe']); // DELETE /users/me
+
+        // User parties
+        Route::get('me/parties', [UserController::class, 'myParties']); // GET /users/me/parties
+        Route::get('{user}/parties', [UserController::class, 'userParties']); // GET /users/{id}/parties
+    });
+
+    Route::apiResource('users', UserController::class);
+});
 
 // --------------
 // MOVIES
