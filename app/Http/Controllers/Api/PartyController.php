@@ -71,6 +71,18 @@ class PartyController extends Controller
     }
 
     /**
+     * End a party (set status to 'archived')
+     * PATCH /parties/:id/end
+     */
+    public function endParty(Party $party)
+    {
+        $party->status = 'archived';
+        $party->save();
+
+        return new PartyResource($party);
+    }
+
+    /**
      * Remove party
      */
     public function destroy(Party $party)

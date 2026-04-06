@@ -63,6 +63,8 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('parties', PartyController::class);
 
+    Route::patch('parties/{party}/end', [PartyController::class, 'endParty']);
+
     // ---- PARTICIPANTS ----
     Route::patch('parties/{party}/participants', [PartyController::class, 'addParticipant']);
     Route::delete(
