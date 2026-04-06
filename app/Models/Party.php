@@ -20,6 +20,8 @@ class Party extends Model
         'movies',
         'author_id',
         'status',
+        'party_impressions',
+        'movie_impressions',
     ];
 
     protected $hidden = [
@@ -31,6 +33,8 @@ class Party extends Model
         'is_online' => 'boolean',
         'start_date' => 'datetime',
         'status' => 'string',
+        'party_impressions' => 'array',
+        'movie_impressions' => 'array',
     ];
 
     public $timestamps = true;

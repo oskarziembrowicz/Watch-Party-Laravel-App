@@ -150,4 +150,50 @@ class PartyController extends Controller
 
         return response()->noContent();
     }
+
+    /**
+     * Add a party impression
+     * POST /parties/:id/impressions/party
+     */
+    public function addPartyImpression(Request $request, Party $party)
+    {
+        $data = $request->validate([
+            'userId'     => 'required|exists:users,id',
+            'impression' => 'required|string',
+        ]);
+
+        $impressions = $party->party_impressions ?? [];
+        $impressions[] = [
+            'user_id'    => $data['userId'],
+            'impression' => $data['impression'],
+        ];
+        $party->party_impressions = $impressions;
+        $party->save();
+
+        return new PartyResource($party);
+    }
+
+    /**
+     * Add a movie impression
+     * POST /parties/:id/impressions/movie
+     */
+    public function addMovieImpression(Request $request, Party $party)
+    {
+        $data = $request->validate([
+            'movieId'    => 'required|string',
+            'userId'     => 'required|exists:users,id',
+            'impression' => 'required|string',
+        ]);
+
+        $impressions = $party->movie_impressions ?? [];
+        $impressions[] = [
+            'movie_id'   => $data['movieId'],
+            'user_id'    => $data['userId'],
+            'impression' => $data['impression'],
+        ];
+        $party->movie_impressions = $impressions;
+        $party->save();
+
+        return new PartyResource($party);
+    }
 }
