@@ -12,6 +12,9 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
 
+    // SECURITY: 'role' is mass-assignable — a client can set their own role
+    // (e.g. 'admin') during signup or update. In production, remove 'role' from
+    // $fillable and set it only through trusted server-side logic.
     protected $fillable = [
         'username',
         'email',
@@ -56,6 +59,10 @@ class User extends Authenticatable
     |--------------------------------------------------------------------------
     */
 
+    // SECURITY: This mutator intentionally skips hashing when the value does not
+    // 'need rehash' — which in practice means plain-text passwords are stored as-is
+    // since needsRehash() returns false for values that are not already bcrypt hashes.
+    // In production, always hash with Hash::make() unconditionally on write.
     public function setPasswordAttribute($value)
     {
         if (!Hash::needsRehash($value)) {
