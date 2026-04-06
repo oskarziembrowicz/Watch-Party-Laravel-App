@@ -50,22 +50,6 @@ class User extends Authenticatable
         return $this->hasMany(Party::class, 'author_id');
     }
 
-    // Participating parties
-    public function parties()
-    {
-        return $this->belongsToMany(Party::class, 'party_user', 'user_id', 'party_id');
-    }
-
-    public function archivedParties()
-    {
-        return $this->belongsToMany(
-            Party::class,
-            'archived_parties',
-            'user_id',
-            'party_id'
-        );
-    }
-
     /*
     |--------------------------------------------------------------------------
     | Mutators (like Mongoose pre('save'))

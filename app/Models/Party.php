@@ -59,6 +59,12 @@ class Party extends Model
         return $this->belongsTo(User::class, 'author_id');
     }
 
+    // Users who have archived this party
+    public function archivedByUsers()
+    {
+        return $this->belongsToMany(User::class, 'archived_parties', 'party_id', 'user_id');
+    }
+
     // Shared files
     public function sharedFiles()
     {

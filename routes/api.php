@@ -45,6 +45,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
         Route::get('me/parties', [UserController::class, 'myParties']);
         Route::get('{user}/parties', [UserController::class, 'userParties']);
+
+        // ---- ARCHIVED PARTIES ----
+        Route::get('me/archived-parties', [UserController::class, 'myArchivedParties']);
     });
 
     Route::apiResource('users', UserController::class);

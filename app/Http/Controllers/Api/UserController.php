@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\UserResource;
+use App\Models\Party;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -149,7 +150,7 @@ class UserController extends Controller
      */
     public function userParties(User $user)
     {
-        return $user->parties()->get();
+        return Party::whereHas('participants', fn($q) => $q->where('users.id', $user->id))->get();
     }
 
     /**
@@ -158,6 +159,19 @@ class UserController extends Controller
      */
     public function myParties(Request $request)
     {
-        return $request->user()->parties()->get();
+        $userId = $request->user()->id;
+        return Party::whereHas('participants', fn($q) => $q->where('users.id', $userId))->get();
+    }
+
+    /**
+     * Get my archived parties
+     * GET /users/me/archived-parties
+     */
+    public function myArchivedParties(Request $request)
+    {
+        $userId = $request->user()->id;
+        return Party::where('status', 'archived')
+            ->whereHas('participants', fn($q) => $q->where('users.id', $userId))
+            ->get();
     }
 }
