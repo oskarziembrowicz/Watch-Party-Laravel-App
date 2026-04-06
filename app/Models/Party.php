@@ -22,6 +22,7 @@ class Party extends Model
         'status',
         'party_impressions',
         'movie_impressions',
+        'useful_links',
     ];
 
     protected $hidden = [
@@ -35,6 +36,7 @@ class Party extends Model
         'status' => 'string',
         'party_impressions' => 'array',
         'movie_impressions' => 'array',
+        'useful_links' => 'array',
     ];
 
     public $timestamps = true;

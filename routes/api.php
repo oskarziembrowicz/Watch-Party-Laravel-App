@@ -79,9 +79,12 @@ Route::middleware('auth:sanctum')->group(function () {
         [PartyController::class, 'removeMovie']
     );
 
+    // ---- USEFUL LINKS ----
+    Route::post('parties/{party}/links', [PartyController::class, 'addUsefulLink']);
+
     // ---- IMPRESSIONS ----
-    Route::post('parties/{party}/impressions/party', [PartyController::class, 'addPartyImpression']);
-    Route::post('parties/{party}/impressions/movie', [PartyController::class, 'addMovieImpression']);
+    Route::post('parties/{party}/impressions', [PartyController::class, 'addPartyImpression']);
+    Route::post('parties/{party}/movies/impressions', [PartyController::class, 'addMovieImpression']);
 
     // ---- SHARED FILES ----
     // SECURITY: No membership check — any authenticated user can list, upload,

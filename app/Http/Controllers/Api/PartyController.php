@@ -152,6 +152,24 @@ class PartyController extends Controller
     }
 
     /**
+     * Add a useful link
+     * POST /parties/:id/useful-links
+     */
+    public function addUsefulLink(Request $request, Party $party)
+    {
+        $data = $request->validate([
+            'link' => 'required|string',
+        ]);
+
+        $links = $party->useful_links ?? [];
+        $links[] = $data['link'];
+        $party->useful_links = $links;
+        $party->save();
+
+        return new PartyResource($party);
+    }
+
+    /**
      * Add a party impression
      * POST /parties/:id/impressions/party
      */
