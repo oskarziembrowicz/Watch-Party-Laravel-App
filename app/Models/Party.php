@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\SharedFile;
 
 class Party extends Model
 {
@@ -48,5 +49,11 @@ class Party extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'author_id');
+    }
+
+    // Shared files
+    public function sharedFiles()
+    {
+        return $this->hasMany(SharedFile::class);
     }
 }

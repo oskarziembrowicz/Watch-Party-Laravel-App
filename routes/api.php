@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\MovieController;
 use App\Http\Controllers\Api\PartyController;
+use App\Http\Controllers\Api\SharedFileController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -75,4 +76,12 @@ Route::middleware('auth:sanctum')->group(function () {
         'parties/{party}/movies/{id}',
         [PartyController::class, 'removeMovie']
     );
+
+    // ---- SHARED FILES ----
+    // SECURITY: No membership check — any authenticated user can list, upload,
+    // download, or delete files for any party. In production, restrict to members.
+    Route::get('parties/{party}/files', [SharedFileController::class, 'index']);
+    Route::post('parties/{party}/files', [SharedFileController::class, 'store']);
+    Route::get('parties/{party}/files/{file}', [SharedFileController::class, 'show']);
+    Route::delete('parties/{party}/files/{file}', [SharedFileController::class, 'destroy']);
 });
