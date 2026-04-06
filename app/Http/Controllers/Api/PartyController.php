@@ -32,6 +32,7 @@ class PartyController extends Controller
                 'joinLink'    => 'nullable|string',
                 'address'     => 'nullable|string',
                 'movies'      => 'nullable|array',
+                'status'      => 'sometimes|in:expected,ongoing,archived',
             ]),
             'author_id' => $request->user()->id,
         ]);
@@ -62,6 +63,7 @@ class PartyController extends Controller
                 'joinLink'    => 'nullable|string',
                 'address'     => 'nullable|string',
                 'movies'      => 'nullable|array',
+                'status'      => 'sometimes|in:expected,ongoing,archived',
             ])
         );
 
