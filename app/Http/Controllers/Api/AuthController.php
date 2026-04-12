@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -37,7 +38,7 @@ class AuthController extends Controller
         return response()->json([
             'user' => $user,
             'token' => $token
-        ], 201);
+        ], 201)->withCookie(cookie('api_token', $token, 60 * 24 * 7, '/', null, config('session.secure'), true, false, 'Strict'));
     }
 
     public function login(Request $request)
@@ -77,7 +78,7 @@ class AuthController extends Controller
 
         return response()->json([
             'token' => $token
-        ]);
+        ])->withCookie(cookie('api_token', $token, 60 * 24 * 7, '/', null, config('session.secure'), true, false, 'Strict'));
     }
 
     public function logout(Request $request)
@@ -89,6 +90,6 @@ class AuthController extends Controller
 
         return response()->json([
             'message' => 'Logged out successfully'
-        ]);
+        ])->withCookie(Cookie::forget('api_token'));
     }
 }
