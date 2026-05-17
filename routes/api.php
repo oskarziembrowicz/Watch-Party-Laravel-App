@@ -49,13 +49,14 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('{user}/hosted-parties', [UserController::class, 'hostedParties']);
 
         Route::get('me/parties', [UserController::class, 'myParties']);
-        Route::get('{user}/parties', [UserController::class, 'userParties']);
+        Route::get('{user}/parties', [UserController::class, 'userParties'])->middleware('restrictTo:admin');
 
         // ---- ARCHIVED PARTIES ----
         Route::get('me/archived-parties', [UserController::class, 'myArchivedParties']);
     });
 
-    Route::apiResource('users', UserController::class);
+    Route::apiResource('users', UserController::class)->except(['index', 'update', 'destroy']);
+    Route::apiResource('users', UserController::class)->only(['index', 'update', 'destroy'])->middleware('restrictTo:admin');
 });
 
 // --------------
@@ -69,7 +70,8 @@ Route::get('/movies/{id}', [MovieController::class, 'getMovieById'])->name('movi
 // --------------
 Route::middleware('auth:sanctum')->group(function () {
 
-    Route::apiResource('parties', PartyController::class);
+    Route::apiResource('parties', PartyController::class)->except(['index']);
+    Route::apiResource('parties', PartyController::class)->only(['index'])->middleware('restrictTo:admin');
 
     Route::patch('parties/{party}/end', [PartyController::class, 'endParty']);
 

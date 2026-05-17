@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->api(prepend: [
             \App\Http\Middleware\AuthenticateFromCookie::class,
         ]);
+        $middleware->alias([
+            'restrictTo' => \App\Http\Middleware\RestrictTo::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
