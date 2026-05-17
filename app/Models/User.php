@@ -19,7 +19,6 @@ class User extends Authenticatable
         'username',
         'email',
         'password',
-        'role',
         'saved_movies',
     ];
 
