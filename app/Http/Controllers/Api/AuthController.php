@@ -13,12 +13,6 @@ class AuthController extends Controller
 {
     public function signup(Request $request)
     {
-        // SECURITY: Password is stored in plain text — no hashing is applied.
-        // In production, use Hash::make() before storing, and Hash::check() when verifying.
-
-        // SECURITY: No password complexity rules (minimum length, character requirements).
-        // In production, add: 'password' => 'required|min:8|...' constraints.
-
         // SECURITY: No rate limiting on signup — the endpoint can be abused for
         // mass account creation. In production, apply throttle middleware.
 
@@ -29,7 +23,7 @@ class AuthController extends Controller
             ...$request->validate([
                 'username' => 'required',
                 'email' => 'required|email|unique:users,email',
-                'password' => 'required',
+                'password' => 'required|min:8',
             ])
         ]);
 
