@@ -11,8 +11,6 @@ class PartyController extends Controller
 {
     /**
      * Display a listing parties.
-     * SECURITY: Returns all parties to any authenticated user with no filtering.
-     * In production, restrict to parties the user is a member of, or add visibility settings.
      */
     public function index(Request $request)
     {
@@ -53,7 +51,6 @@ class PartyController extends Controller
         return new PartyResource($party);
     }
 
-    // FIXME: This creates a new party
     // SECURITY: Any authenticated user can update any party, not just its author.
     // In production, verify $request->user()->id === $party->author_id.
     public function update(Request $request, Party $party)

@@ -10,8 +10,6 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    // SECURITY: Returns the full list of all users to any authenticated user.
-    // In production, restrict this to admins only.
     public function index(Request $request)
     {
         return UserResource::collection(User::latest()->get());
@@ -27,8 +25,6 @@ class UserController extends Controller
         return new UserResource($request->user());
     }
 
-    // SECURITY: Any authenticated user can update any other user's profile.
-    // In production, restrict this to the user themselves or an admin.
     public function update(Request $request, User $user)
     {
         $user->update(
@@ -53,8 +49,6 @@ class UserController extends Controller
         return new UserResource($request->user());
     }
 
-    // SECURITY: Any authenticated user can delete any other user's account.
-    // In production, restrict this to the user themselves or an admin.
     public function destroy(User $user)
     {
         $user->delete();

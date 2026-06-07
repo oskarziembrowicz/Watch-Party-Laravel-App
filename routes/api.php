@@ -16,14 +16,11 @@ Route::get('/hello', function () {
 
 // --------------
 // AUTHENTICATION
-// SECURITY: Signup and login routes are completely public with no rate limiting.
-// In production, apply throttle middleware (e.g. throttle:10,1) to both routes
-// to prevent brute-force and credential-stuffing attacks.
 // SECURITY: Logout uses GET, which means a browser or bot can trigger it via
 // a prefetched link. In production, use POST for state-changing actions.
 // --------------
-Route::post('/users/signup', [AuthController::class, 'signup']);
-Route::post('/users/login', [AuthController::class, 'login']);
+Route::post('/users/signup', [AuthController::class, 'signup'])->middleware('throttle:10,60');
+Route::post('/users/login', [AuthController::class, 'login'])->middleware('throttle:10,60');
 Route::get('/users/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 // --------------

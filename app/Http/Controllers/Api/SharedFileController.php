@@ -26,17 +26,15 @@ class SharedFileController extends Controller
      * POST /parties/{party}/files
      *
      * SECURITY: The following checks are intentionally omitted for academic purposes:
-     *   - File type / extension whitelist (allows any file, including executables and scripts)
-     *   - File size limit (no max enforced here; relies only on PHP/server defaults)
      *   - Virus / malware scanning
      *   - Membership check (any authenticated user can upload to any party)
      */
     public function store(Request $request, Party $party)
     {
-        // SECURITY: Only 'required|file' is validated.
-        // In production, add: mimes:..., max:..., and verify the user is a party member.
+        // SECURITY: File type (mimes) and size (max:10240 KB) are validated.
+        // In production, also verify the user is a party member before allowing uploads.
         $request->validate([
-            'file' => 'required|file',
+            'file' => 'required|file|mimes:jpg,jpeg,png,gif,mp4,pdf|mimetypes:image/jpeg,image/png,image/gif,video/mp4,application/pdf|max:10240',
         ]);
 
         $uploadedFile = $request->file('file');
@@ -52,9 +50,7 @@ class SharedFileController extends Controller
             'uploaded_by'   => $request->user()?->id,
             'original_name' => $uploadedFile->getClientOriginalName(),
             'stored_path'   => $storedPath,
-            // SECURITY: getClientMimeType() trusts the client-supplied Content-Type header.
-            // In production, detect MIME server-side with finfo or mime_content_type().
-            'mime_type'     => $uploadedFile->getClientMimeType(),
+            'mime_type'     => $uploadedFile->getMimeType(),
             'size'          => $uploadedFile->getSize(),
         ]);
 
