@@ -16,12 +16,10 @@ Route::get('/hello', function () {
 
 // --------------
 // AUTHENTICATION
-// SECURITY: Logout uses GET, which means a browser or bot can trigger it via
-// a prefetched link. In production, use POST for state-changing actions.
 // --------------
 Route::post('/users/signup', [AuthController::class, 'signup'])->middleware('throttle:10,60');
 Route::post('/users/login', [AuthController::class, 'login'])->middleware('throttle:10,60');
-Route::get('/users/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
+Route::post('/users/logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
 
 // --------------
 // USERS

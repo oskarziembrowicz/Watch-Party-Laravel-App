@@ -12,9 +12,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasApiTokens;
 
-    // SECURITY: 'role' is mass-assignable — a client can set their own role
-    // (e.g. 'admin') during signup or update. In production, remove 'role' from
-    // $fillable and set it only through trusted server-side logic.
     protected $fillable = [
         'username',
         'email',

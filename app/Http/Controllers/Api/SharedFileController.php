@@ -31,8 +31,7 @@ class SharedFileController extends Controller
      */
     public function store(Request $request, Party $party)
     {
-        // SECURITY: File type (mimes) and size (max:10240 KB) are validated.
-        // In production, also verify the user is a party member before allowing uploads.
+        // SECURITY: In production, also verify the user is a party member before allowing uploads.
         $request->validate([
             'file' => 'required|file|mimes:jpg,jpeg,png,gif,mp4,pdf|mimetypes:image/jpeg,image/png,image/gif,video/mp4,application/pdf|max:10240',
         ]);

@@ -35,9 +35,6 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // SECURITY: No per-account lockout after repeated failures.
-        // In production, temporarily lock accounts after N failed attempts.
-
         // SECURITY: Tokens are not scoped — the created token has access to all
         // abilities. In production, use named abilities to limit token permissions.
 
@@ -83,10 +80,8 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        // SECURITY: All tokens for the user are revoked, not just the current one.
-        // This is acceptable but means other devices are also logged out silently.
-        // In production, consider revoking only the current token: $request->user()->currentAccessToken()->delete();
-        $request->user()->tokens()->delete();
+        // $request->user()->tokens()->delete();
+        $request->user()->currentAccessToken()->delete();
 
         return response()->json([
             'message' => 'Logged out successfully'
