@@ -6,6 +6,7 @@ use App\Models\Party;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\PartyResource;
+use App\Rules\SafeHttpUrl;
 
 class PartyController extends Controller
 {
@@ -29,7 +30,12 @@ class PartyController extends Controller
                 'description' => 'nullable|string',
                 'startDate'   => 'nullable|date',
                 'isOnline'    => 'required|boolean',
-                'joinLink'    => 'nullable|string',
+                'joinLink'    =>
+                [
+                    'nullable',
+                    'string',
+                    new SafeHttpUrl()
+                ],
                 'address'     => 'nullable|string',
                 'movies'      => 'nullable|array',
                 'status'      => 'sometimes|in:expected,ongoing,archived',
@@ -61,7 +67,12 @@ class PartyController extends Controller
                 'description' => 'nullable|string',
                 'startDate'   => 'nullable|date',
                 'isOnline'    => 'sometimes|boolean',
-                'joinLink'    => 'nullable|string',
+                'joinLink'    =>
+                [
+                    'nullable',
+                    'string',
+                    new SafeHttpUrl()
+                ],
                 'address'     => 'nullable|string',
                 'movies'      => 'nullable|array',
                 'status'      => 'sometimes|in:expected,ongoing,archived',
@@ -161,14 +172,11 @@ class PartyController extends Controller
     /**
      * Add a useful link
      * POST /parties/:id/useful-links
-     * SECURITY: The link value is stored as a plain string with no URL validation.
-     * In production, validate with 'url' rule and restrict to party members.
-     * Also consider limits on the number of links per party.
      */
     public function addUsefulLink(Request $request, Party $party)
     {
         $data = $request->validate([
-            'link' => 'required|string',
+            'link' => ['required', 'string', new SafeHttpUrl()],
         ]);
 
         $links = $party->useful_links ?? [];
