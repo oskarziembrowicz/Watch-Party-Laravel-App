@@ -14,9 +14,6 @@ class AuthController extends Controller
 {
     public function signup(Request $request)
     {
-        // SECURITY: The full user object (including role) is returned in the response.
-        // In production, return only safe fields via a UserResource.
-
         $user = User::create([
             ...$request->validate([
                 'username' => 'required',
