@@ -28,8 +28,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('users')->group(function () {
         // ---- Me ----
         Route::get('me', [UserController::class, 'getMe']);;
-        Route::patch('me', [UserController::class, 'updateMe']);   // PATCH /users/me
-        Route::delete('me', [UserController::class, 'destroyMe']); // DELETE /users/me
+        Route::patch('me', [UserController::class, 'updateMe']);
+        Route::delete('me', [UserController::class, 'destroyMe']);
 
         // ---- FRIENDS ----
         Route::put('me/friends', [UserController::class, 'addFriend']);
@@ -92,8 +92,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('parties/{party}/movies/impressions', [PartyController::class, 'addMovieImpression']);
 
     // ---- SHARED FILES ----
-    // SECURITY: No membership check — any authenticated user can list, upload,
-    // download, or delete files for any party. In production, restrict to members.
     Route::get('parties/{party}/files', [SharedFileController::class, 'index']);
     Route::post('parties/{party}/files', [SharedFileController::class, 'store']);
     Route::get('parties/{party}/files/{file}', [SharedFileController::class, 'show']);

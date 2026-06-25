@@ -55,10 +55,6 @@ class User extends Authenticatable
     |--------------------------------------------------------------------------
     */
 
-    // SECURITY: This mutator intentionally skips hashing when the value does not
-    // 'need rehash' — which in practice means plain-text passwords are stored as-is
-    // since needsRehash() returns false for values that are not already bcrypt hashes.
-    // In production, always hash with Hash::make() unconditionally on write.
     public function setPasswordAttribute($value)
     {
         if (!Hash::needsRehash($value)) {

@@ -64,10 +64,6 @@ class UserController extends Controller
         return response(status: 204);
     }
 
-    /**
-     * Add a friend
-     * PUT /users/me/friends
-     */
     public function addFriend(Request $request)
     {
         $request->validate(['friendId' => 'required|exists:users,id']);
@@ -80,10 +76,6 @@ class UserController extends Controller
         return new UserResource($user->load('friends'));
     }
 
-    /**
-     * Remove a friend
-     * DELETE /users/me/friends/:id
-     */
     public function removeFriend(Request $request, $id)
     {
         $user = $request->user();
@@ -93,10 +85,6 @@ class UserController extends Controller
         return response()->noContent();
     }
 
-    /**
-     * Add a movie
-     * PUT /users/me/movies
-     */
     public function addMovie(Request $request)
     {
         $request->validate(['movieId' => 'required|string']);
@@ -112,10 +100,6 @@ class UserController extends Controller
         return new UserResource($user);
     }
 
-    /**
-     * Remove a movie
-     * DELETE /users/me/movies/:id
-     */
     public function removeMovie(Request $request, $id)
     {
         $user = $request->user();
@@ -126,47 +110,27 @@ class UserController extends Controller
         return response()->noContent();
     }
 
-    /**
-     * Get a user's hosted parties
-     * GET /users/:id/hosted-parties
-     */
     public function hostedParties(User $user)
     {
         return $user->hostedParties()->get();
     }
 
-    /**
-     * Get my hosted parties
-     * GET /users/me/hosted-parties
-     */
     public function myHostedParties(Request $request)
     {
         return $request->user()->hostedParties()->get();
     }
 
-    /**
-     * Get a user's participating parties
-     * GET /users/:id/parties
-     */
     public function userParties(User $user)
     {
         return Party::whereHas('participants', fn($q) => $q->where('users.id', $user->id))->get();
     }
 
-    /**
-     * Get my participating parties
-     * GET /users/me/parties
-     */
     public function myParties(Request $request)
     {
         $userId = $request->user()->id;
         return Party::whereHas('participants', fn($q) => $q->where('users.id', $userId))->get();
     }
 
-    /**
-     * Get my archived parties
-     * GET /users/me/archived-parties
-     */
     public function myArchivedParties(Request $request)
     {
         $userId = $request->user()->id;

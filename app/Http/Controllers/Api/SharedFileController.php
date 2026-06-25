@@ -10,10 +10,6 @@ use App\Http\Controllers\Controller;
 
 class SharedFileController extends Controller
 {
-    /**
-     * List all shared files for a party.
-     * GET /parties/{party}/files
-     */
     public function index(Party $party)
     {
         return response()->json(
@@ -21,17 +17,8 @@ class SharedFileController extends Controller
         );
     }
 
-    /**
-     * Upload a file and attach it to a party.
-     * POST /parties/{party}/files
-     *
-     * SECURITY: The following checks are intentionally omitted for academic purposes:
-     *   - Virus / malware scanning
-     *   - Membership check (any authenticated user can upload to any party)
-     */
     public function store(Request $request, Party $party)
     {
-        // SECURITY: In production, also verify the user is a party member before allowing uploads.
         $request->validate([
             'file' => 'required|file|mimes:jpg,jpeg,png,gif,mp4,pdf|mimetypes:image/jpeg,image/png,image/gif,video/mp4,application/pdf|max:10240',
         ]);
@@ -40,8 +27,6 @@ class SharedFileController extends Controller
 
         // Store under a per-party directory using a generated unique name to avoid
         // overwrite collisions, while preserving the original name in the database.
-        // SECURITY: The stored_path is not exposed directly; files are served through
-        // the download endpoint. In production, also add path-traversal protection.
         $storedPath = $uploadedFile->store("shared_files/{$party->id}");
 
         $sharedFile = SharedFile::create([
@@ -56,13 +41,6 @@ class SharedFileController extends Controller
         return response()->json($sharedFile->load('uploader:id,username'), 201);
     }
 
-    /**
-     * Download a shared file.
-     * GET /parties/{party}/files/{file}
-     *
-     * SECURITY: Any authenticated user can download any file from any party.
-     * In production, restrict downloads to party members (or make parties private).
-     */
     public function show(Party $party, SharedFile $file)
     {
         // Ensure the file record belongs to the requested party.
@@ -75,13 +53,6 @@ class SharedFileController extends Controller
         ]);
     }
 
-    /**
-     * Delete a shared file.
-     * DELETE /parties/{party}/files/{file}
-     *
-     * SECURITY: Any authenticated user can delete any file from any party.
-     * In production, restrict deletion to the uploader or the party author.
-     */
     public function destroy(Party $party, SharedFile $file)
     {
         abort_if($file->party_id !== $party->id, 404);

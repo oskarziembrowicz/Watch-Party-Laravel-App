@@ -10,17 +10,11 @@ use App\Rules\SafeHttpUrl;
 
 class PartyController extends Controller
 {
-    /**
-     * Display a listing parties.
-     */
     public function index(Request $request)
     {
         return PartyResource::collection(Party::latest()->get());
     }
 
-    /**
-     * Store a newly created party in storage.
-     */
     public function store(Request $request)
     {
         // Create party
@@ -49,16 +43,11 @@ class PartyController extends Controller
         return new PartyResource($party);
     }
 
-    /**
-     * Display the party
-     */
     public function show(Request $request, Party $party)
     {
         return new PartyResource($party);
     }
 
-    // SECURITY: Any authenticated user can update any party, not just its author.
-    // In production, verify $request->user()->id === $party->author_id.
     public function update(Request $request, Party $party)
     {
         $party->update(
@@ -82,12 +71,6 @@ class PartyController extends Controller
         return new PartyResource($party);
     }
 
-    /**
-     * End a party (set status to 'archived')
-     * PATCH /parties/:id/end
-     * SECURITY: Any authenticated user can end any party.
-     * In production, restrict this to the party author.
-     */
     public function endParty(Party $party)
     {
         $party->status = 'archived';
@@ -96,11 +79,6 @@ class PartyController extends Controller
         return new PartyResource($party);
     }
 
-    /**
-     * Remove party
-     * SECURITY: Any authenticated user can delete any party.
-     * In production, restrict deletion to the party author or an admin.
-     */
     public function destroy(Party $party)
     {
         $party->delete();
@@ -108,12 +86,6 @@ class PartyController extends Controller
         return response(status: 204);
     }
 
-    /**
-     * Add a participant
-     * PATCH /parties/:id
-     * SECURITY: Any authenticated user can add anyone to any party.
-     * In production, restrict this to the party author, or require an invite flow.
-     */
     public function addParticipant(Request $request, Party $party)
     {
         $request->validate(['userId' => 'required|exists:users,id']);
@@ -123,10 +95,6 @@ class PartyController extends Controller
         return new PartyResource($party->load('participants'));
     }
 
-    /**
-     * Remove a participant
-     * DELETE /parties/:partyId/participants/:id
-     */
     public function removeParticipant($partyId, $id)
     {
         $party = Party::findOrFail($partyId);
@@ -136,10 +104,6 @@ class PartyController extends Controller
         return response()->noContent();
     }
 
-    /**
-     * Add a movie
-     * PATCH /parties/:id/movies
-     */
     public function addMovie(Request $request, Party $party)
     {
         $request->validate(['movieId' => 'required|string']);
@@ -154,10 +118,6 @@ class PartyController extends Controller
         return new PartyResource($party);
     }
 
-    /**
-     * Remove a movie
-     * DELETE /parties/:partyId/movies/:id
-     */
     public function removeMovie($partyId, $id)
     {
         $party = Party::findOrFail($partyId);
@@ -169,10 +129,6 @@ class PartyController extends Controller
         return response()->noContent();
     }
 
-    /**
-     * Add a useful link
-     * POST /parties/:id/useful-links
-     */
     public function addUsefulLink(Request $request, Party $party)
     {
         $data = $request->validate([
@@ -187,14 +143,6 @@ class PartyController extends Controller
         return new PartyResource($party);
     }
 
-    /**
-     * Add a party impression
-     * POST /parties/:id/impressions/party
-     * SECURITY: Any authenticated user can leave an impression on any party, and
-     * the userId is taken from the request body — not the authenticated user.
-     * In production, derive userId from $request->user()->id and restrict to members.
-     * Also enforce one impression per user.
-     */
     public function addPartyImpression(Request $request, Party $party)
     {
         $data = $request->validate([
@@ -213,13 +161,6 @@ class PartyController extends Controller
         return new PartyResource($party);
     }
 
-    /**
-     * Add a movie impression
-     * POST /parties/:id/impressions/movie
-     * SECURITY: Same issues as addPartyImpression — userId is client-supplied and
-     * there is no membership or duplicate check.
-     * In production, derive userId server-side and enforce one impression per user per movie.
-     */
     public function addMovieImpression(Request $request, Party $party)
     {
         $data = $request->validate([

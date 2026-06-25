@@ -32,9 +32,6 @@ class AuthController extends Controller
 
     public function login(Request $request)
     {
-        // SECURITY: Tokens are not scoped — the created token has access to all
-        // abilities. In production, use named abilities to limit token permissions.
-
         $request->validate([
             'email' => 'required|email',
             'password' => 'required',
@@ -77,7 +74,6 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
-        // $request->user()->tokens()->delete();
         $request->user()->currentAccessToken()->delete();
 
         return response()->json([
