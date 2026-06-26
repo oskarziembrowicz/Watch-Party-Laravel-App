@@ -1,59 +1,227 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# WatchParty – aplikacja Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikacja REST API do organizowania wspólnych seansów filmowych, zbudowana w oparciu o framework Laravel (PHP).
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Wymagania wstępne
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Przed przystąpieniem do instalacji upewnij się, że masz zainstalowane poniższe narzędzia.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### 1. PHP 8.2+
 
-## Learning Laravel
+Sprawdź, czy PHP jest zainstalowane:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework. You can also check out [Laravel Learn](https://laravel.com/learn), where you will be guided through building a modern Laravel application.
+```bash
+php -v
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Jeśli nie – zainstaluj zgodnie z systemem operacyjnym:
 
-## Laravel Sponsors
+- **Ubuntu/Debian:**
+    ```bash
+    sudo apt update
+    sudo apt install php8.2 php8.2-cli php8.2-mbstring php8.2-xml php8.2-curl php8.2-zip php8.2-mysql php8.2-pdo
+    ```
+- **macOS (Homebrew):**
+    ```bash
+    brew install php
+    ```
+- **Windows:** pobierz instalator ze strony [https://windows.php.net/download](https://windows.php.net/download) i dodaj PHP do zmiennej środowiskowej `PATH`.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+### 2. Composer
 
-### Premium Partners
+Composer to menedżer pakietów dla PHP.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+Sprawdź, czy jest zainstalowany:
 
-## Contributing
+```bash
+composer -V
+```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Jeśli nie – zainstaluj zgodnie z oficjalną dokumentacją: [https://getcomposer.org/download](https://getcomposer.org/download)
 
-## Code of Conduct
+Przykład dla Linux/macOS:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+php composer-setup.php
+sudo mv composer.phar /usr/local/bin/composer
+```
 
-## Security Vulnerabilities
+### 3. Node.js 18+ i npm
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Wymagane do kompilacji front-endowych zasobów przez Vite.
 
-## License
+Sprawdź, czy jest zainstalowany:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+node -v
+npm -v
+```
+
+Jeśli nie – pobierz instalator ze strony [https://nodejs.org](https://nodejs.org) (zalecana wersja LTS).
+
+Linux (via nvm):
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+nvm install --lts
+```
+
+### 4. MySQL 8+
+
+Aplikacja korzysta z bazy danych MySQL.
+
+- **Ubuntu/Debian:**
+    ```bash
+    sudo apt update
+    sudo apt install mysql-server
+    sudo systemctl start mysql
+    sudo systemctl enable mysql
+    ```
+- **macOS (Homebrew):**
+    ```bash
+    brew install mysql
+    brew services start mysql
+    ```
+- **Windows:** pobierz MySQL Installer ze strony [https://dev.mysql.com/downloads/installer](https://dev.mysql.com/downloads/installer).
+
+### 5. Klucze API
+
+Aplikacja korzysta z zewnętrznego API do pobierania informacji o filmach:
+
+- **OMDb API** – utwórz bezpłatne konto na [https://www.omdbapi.com/apikey.aspx](https://www.omdbapi.com/apikey.aspx), aby uzyskać klucz API.
+
+---
+
+## Pobranie projektu
+
+Sklonuj repozytorium za pomocą Git:
+
+```bash
+git clone https://github.com/oskarziembrowicz/masters-degree-project.git
+cd masters-degree-project/WatchParty-Laravel-App
+```
+
+Jeśli Git nie jest zainstalowany:
+
+- **Ubuntu/Debian:** `sudo apt install git`
+- **macOS:** `brew install git`
+- **Windows:** pobierz z [https://git-scm.com/download/win](https://git-scm.com/download/win)
+
+---
+
+## Konfiguracja bazy danych
+
+Zaloguj się do MySQL jako root i utwórz bazę danych oraz użytkownika:
+
+```bash
+sudo mysql -u root -p
+```
+
+```sql
+CREATE DATABASE watch_party_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER 'watchparty'@'localhost' IDENTIFIED BY 'watchparty';
+GRANT ALL PRIVILEGES ON watch_party_db.* TO 'watchparty'@'localhost';
+FLUSH PRIVILEGES;
+EXIT;
+```
+
+---
+
+## Konfiguracja pliku `.env`
+
+Skopiuj przykładowy plik konfiguracyjny:
+
+```bash
+cp .env.example .env
+```
+
+Otwórz plik `.env` i dostosuj wartości do swojego środowiska. Najważniejsze sekcje:
+
+```env
+APP_NAME=Laravel
+APP_ENV=local
+APP_DEBUG=true
+APP_URL=http://localhost
+
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=watch_party_db
+DB_USERNAME=watchparty
+DB_PASSWORD=watchparty
+
+# Klucz API
+OMDB_API_KEY=twój_klucz_omdb_api
+```
+
+Jeśli podczas tworzenia użytkownika MySQL ustawiłeś inne hasło lub nazwę użytkownika, zmień odpowiednio `DB_USERNAME` i `DB_PASSWORD`.
+
+---
+
+## Instalacja zależności
+
+### Zależności PHP (Composer)
+
+```bash
+composer install
+```
+
+### Zależności JavaScript (npm)
+
+```bash
+npm install
+```
+
+---
+
+## Generowanie klucza aplikacji
+
+Laravel wymaga unikalnego klucza szyfrowania. Wygeneruj go poleceniem:
+
+```bash
+php artisan key:generate
+```
+
+Klucz zostanie automatycznie zapisany do pliku `.env`.
+
+---
+
+## Uruchomienie migracji bazy danych
+
+Utwórz strukturę tabel w bazie danych:
+
+```bash
+php artisan migrate
+```
+
+Opcjonalnie – jeśli chcesz wypełnić bazę przykładowymi danymi (seeders):
+
+```bash
+php artisan db:seed
+```
+
+---
+
+## Uruchomienie aplikacji
+
+```bash
+php artisan serve
+```
+
+---
+
+## Podsumowanie – kolejność kroków
+
+1. Zainstaluj PHP 8.2+, Composer, Node.js, MySQL
+2. Sklonuj repozytorium
+3. Przejdź do katalogu `WatchParty-Laravel-App`
+4. Utwórz bazę danych i użytkownika MySQL
+5. Skopiuj `.env.example` do `.env` i skonfiguruj dane bazy
+6. Uruchom `composer install`
+7. Uruchom `npm install`
+8. Uruchom `php artisan key:generate`
+9. Uruchom `php artisan migrate`
+10. Uruchom `php artisan serve`
